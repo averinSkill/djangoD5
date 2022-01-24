@@ -9,7 +9,7 @@ class Author(models.Model):
     rating = models.IntegerField(default=0)
 
     def update_rating(self):
-        p_rat = self.post_set.aggregate(post_rating=Sum('rating'))
+        p_rat = self.publication_set.aggregate(post_rating=Sum('rating'))
         post_rat = 0
         post_rat += p_rat.get('post_rating')
 
@@ -35,11 +35,15 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    d_time = models.DateTimeField(auto_now_add=True)
-    type_post = models.CharField(max_length=3,
-                              choices=[('NWS','новость'),('ART','статья')],
-                              default='NWS')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    d_time = models.DateTimeField(auto_now_add=True, verbose_name="Время создания новости")
+    type_post = models.CharField(
+        max_length=3,
+        choices=[('NWS', 'новость'), ('ART', 'статья')],
+        default='NWS',
+        verbose_name="Вид публикации"
+    )
+
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name="Автор")
     category = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=255)
     text = models.TextField()
@@ -63,14 +67,16 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+    def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
+        return f'/news/{self.id}'
 
 class PostCategory(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    publication = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    publication = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255, blank=True)
     d_time = models.DateTimeField(auto_now_add=True)
@@ -85,32 +91,6 @@ class Comment(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.text}'
+        return f'{self.content}'
 
-#
-# class New(models.Model):
-#     title = models.CharField(
-#         max_length=128,
-#         # unique=True,
-#     )
-#     text = models.TextField()
-#     d_time = models.DateTimeField(auto_now_add=True)
-#     slug = models.SlugField(max_length=128, unique=True)
-#
-#     # category = models.ForeignKey(
-#     #     to='Category',
-#     #     on_delete=models.CASCADE,
-#     #     # related_name='all_news',
-#     # )
-#
-#     def get_absolute_url(self):
-#         return reverse('detail', kwargs={'slug': self.slug})
-#
-#     def __str__(self):
-#         # return '{}'.format(self.title)
-#         return f'{self.title}'
-
-    # class Meta:
-    #     verbose_name = 'Новость'
-    #     verbose_name_plural = 'Новости'
 
