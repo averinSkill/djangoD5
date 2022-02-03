@@ -128,15 +128,15 @@ def subscribe_category(request, pk):
     category = Category.objects.get(id=pk)
     print('2', category)
     category.subscribers.add(user)
-    print('3', category.subscribers.get())
+    # print('3', category.subscribers.get())
     id_u = request.user.id
     print('id_u', id_u)
     email = category.subscribers.get(id=id_u).email
     print('email', email)
-    # send_mail(
-    #     subject=f'News Portal: подписка на обновления категории {category}',
-    #     message=f'«{request.user}», вы подписались на обновление категории: «{category}».',
-    #     from_email='subscribecategory@yandex.ru',
-    #     recipient_list=[f'{email}', ],
-    # )
+    send_mail(
+        subject=f'News Portal: подписка на обновления категории {category}',
+        message=f'«{request.user}», вы подписались на обновление категории: «{category}».',
+        from_email='apractikant@yandex.ru',
+        recipient_list=[f'{email}', ],
+    )
     return redirect('/news')
