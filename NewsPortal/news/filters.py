@@ -17,6 +17,25 @@ class PostFilter(FilterSet):
         # fields = {
         #     'author': [],
         #     'd_time': ['exact', 'year__lt'],
-        # }
+        # }  , 'category'
 
-
+ # title = CharFilter('title',
+ #                               label='Заголовок содержит:',
+ #                               lookup_expr='icontains',
+ #                               )
+ #
+ #    author = ModelMultipleChoiceFilter('author',
+ #                               label='Автор:',
+ #                               lookup_expr='exact',
+ #                               queryset=Author.objects.all()
+ #                               )
+# PostFilter:
+#     title = CharFilter(‘title’,
+#                                label=‘Заголовок содержит:’,
+#                                lookup_expr=‘icontains’,
+#                                )
+#     author = ModelMultipleChoiceFilter(‘author’,
+#                                label=‘Автор:’,
+#                                lookup_expr=‘exact’,
+#                                queryset=Author.objects.all()
+#                                )

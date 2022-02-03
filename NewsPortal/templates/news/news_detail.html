@@ -15,8 +15,14 @@
 <br>
 <br>
 {{ news_detail.text|censor }}
+<br>
+<br>
+<br>
 
 <br>
+<!--{% for category in post_category %}-->
+<!--    <a href="{% url 'post_category' category.id %}">{{ category.name }} </a>-->
+<!--{% endfor %}-->
 <br>
 <a href="{% url 'news_edit' news_detail.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
 <a href="{% url 'news_delete' news_detail.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->

@@ -45,19 +45,25 @@ INSTALLED_APPS = [
     'fpages',
     'news',
     'django_filters',
+
     'sign',
     'protect',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    # 'allauth.account.forms',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
+    # D6
+    'appointments',
 ]
 
 SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
+# При корректных данных для входа, пользователь перенаправляется на страницу, указанною по данному пути
+# страница, куда перенаправляется пользователь после успешного входа на сайт, в данном случае корневая страница сайта
 LOGIN_REDIRECT_URL = '/news/'
 
 MIDDLEWARE = [
@@ -77,7 +83,7 @@ ROOT_URLCONF = 'NewsPortal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'appointments\\templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -167,4 +173,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+# D6
+EMAIL_HOST = 'smtp.yandex.ru'  # адрес сервера Яндекс-почты для всех один и тот же
+EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
+EMAIL_HOST_USER = 'apractikant'  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_PASSWORD = 'wlcwrxquzwfzetup'  # пароль от почты
+EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
 

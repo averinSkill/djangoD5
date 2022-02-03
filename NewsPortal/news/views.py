@@ -1,10 +1,14 @@
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
-from .models import Post, Category
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+
+
+from .models import Post, Category, PostCategory
 from .filters import PostFilter
 from .forms import PostForm
 
@@ -19,7 +23,7 @@ class NewsList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        # context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
+        context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
 
         context['categories'] = Category.objects.all()
@@ -47,7 +51,10 @@ class Search(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['time_now'] = datetime.utcnow()
+        context['categories'] = Category.objects.all()
+        # context['publication'] = PostCategory.objects.get(post=self.kwargs['pk']).category
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
+
 
         return context
 
@@ -59,14 +66,24 @@ class NewsDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
+        context['category'] = Category.objects.all()
+        # context['publication'] = PostCategory.objects.get(post=self.kwargs['pk']).publication
         return context
 
 
-# дубль из модуля D4
-# class NewsDetailView(DetailView):
-#     context_object_name = 'news_detail_view'
-#     template_name = 'news/news_detail_view.html'
-#     queryset = Post.objects.all()
+# D6 подписка
+class CategoryView(ListView):
+    model = Category
+    template_name = 'news/post_category.html'
+    context_object_name = 'post_category'
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+
+        return context
 
 
 # дженерик для создания объекта. Надо указать только имя шаблона и класс формы, который мы написали в прошлом юните. Остальное он сделает за вас
@@ -104,3 +121,22 @@ class NewsDelete(PermissionRequiredMixin, DeleteView):
 
 
 
+@login_required
+def subscribe_category(request, pk):
+    user = request.user
+    print('1', user)
+    category = Category.objects.get(id=pk)
+    print('2', category)
+    category.subscribers.add(user)
+    print('3', category.subscribers.get())
+    id_u = request.user.id
+    print('id_u', id_u)
+    email = category.subscribers.get(id=id_u).email
+    print('email', email)
+    # send_mail(
+    #     subject=f'News Portal: подписка на обновления категории {category}',
+    #     message=f'«{request.user}», вы подписались на обновление категории: «{category}».',
+    #     from_email='subscribecategory@yandex.ru',
+    #     recipient_list=[f'{email}', ],
+    # )
+    return redirect('/news')

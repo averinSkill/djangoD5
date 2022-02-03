@@ -16,6 +16,10 @@ News
     {{ filter.form }} <!-- Форму от фильтров за нас сделает django. А вот кнопку, увы придётся делать самому -->
     <input type="submit" value="Найти">
 </form>
+<br>
+<br>
+<h3><a href="{% url 'category' %}">Выбрать категорию</a></h3>
+<br>
 
     <hr>
     {% if news_list %}

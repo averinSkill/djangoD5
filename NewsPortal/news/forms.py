@@ -12,3 +12,4 @@ class PostForm(ModelForm):
             'text': Textarea(attrs={'cols': 80, 'rows': 20}),
         }
 
+# ,  'author=&d_time_after=&d_time_before=&type_post=&category=4'

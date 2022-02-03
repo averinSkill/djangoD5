@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %} <!-- не забываем заранее загружать наши фильтры! -->
+
+
+{% block title %} Category {% endblock title %}
+ 
+{% block content %}
+<br>
+<br>
+<h3>Вы подписаны на:</h3>
+<hr>
+<br>
+<table>
+    {% for category in post_category %}
+    <tr>
+        <td>
+            <h4><a href="{% url 'subscribe_category' category.id %}">{{ category.name }} </a></h4>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock content %}
