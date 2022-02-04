@@ -20,9 +20,16 @@
 <br>
 
 <br>
-<!--{% for category in post_category %}-->
-<!--    <a href="{% url 'post_category' category.id %}">{{ category.name }} </a>-->
-<!--{% endfor %}-->
+<table>
+    {% for category in post_category %}
+    <tr>
+        <td>
+            <h4><a href="{% url 'add_subscribe' category.id %}">{{ category.name }} </a></h4>
+
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 <br>
 <a href="{% url 'news_edit' news_detail.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
 <a href="{% url 'news_delete' news_detail.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->

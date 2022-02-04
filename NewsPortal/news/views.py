@@ -1,11 +1,13 @@
 from datetime import datetime
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect, reverse
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 from django.contrib.auth.models import User
 
@@ -68,14 +70,18 @@ class NewsDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
         context['category'] = Category.objects.all()
-        id = self.kwargs.get('pk')  # получаем ИД поста (выдергиваем из нашего объекта из модели Пост)
-        # формируем запрос, на выходе получим список имен пользователей subscribers__name, которые находятся
-        # в подписчиках данной группы, либо не находятся
-        qwe = Category.objects.filter(pk=Post.objects.get(pk=id).category.id).values("subscribers__name")
-        # Добавляем новую контекстную переменную на нашу страницу, выдает либо правду, либо ложь, в зависимости от
-        # нахождения нашего пользователя в группе подписчиков subscribers
-        context['is_not_subscribe'] = not qwe.filter(subscribers__name=self.request.user).exists()
-        context['is_subscribe'] = qwe.filter(subscribers__name=self.request.user).exists()
+        publication_id = self.kwargs.get('pk')
+        post = Post.objects.get(pk=publication_id)
+        print('POST', post.objects.all())
+        print('publication_id = ', self.kwargs.get('pk'))
+        # id = self.kwargs.get('pk')  # получаем ИД поста (выдергиваем из нашего объекта из модели Пост)
+        # # формируем запрос, на выходе получим список имен пользователей subscribers__name, которые находятся
+        # # в подписчиках данной группы, либо не находятся
+        # qwe = Category.objects.filter(pk=Post.objects.get(pk=id).category.id).values("subscribers__name")
+        # # Добавляем новую контекстную переменную на нашу страницу, выдает либо правду, либо ложь, в зависимости от
+        # # нахождения нашего пользователя в группе подписчиков subscribers
+        # context['is_not_subscribe'] = not qwe.filter(subscribers__name=self.request.user).exists()
+        # context['is_subscribe'] = qwe.filter(subscribers__name=self.request.user).exists()
         return context
 
 
