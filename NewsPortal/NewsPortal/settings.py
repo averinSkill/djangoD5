@@ -61,6 +61,8 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+DEFAULT_FROM_EMAIL = 'apractikant@yandex.ru'
+
 LOGIN_URL = '/accounts/login/'
 # При корректных данных для входа, пользователь перенаправляется на страницу, указанною по данному пути
 # страница, куда перенаправляется пользователь после успешного входа на сайт, в данном случае корневая страница сайта
@@ -103,9 +105,11 @@ ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -114,6 +118,8 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
