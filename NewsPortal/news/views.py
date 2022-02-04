@@ -9,11 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from django.contrib.auth.models import User
-
 from .models import Post, Category, PostCategory
 from .filters import PostFilter
 from .forms import PostForm
+
 
 
 class NewsList(ListView):
@@ -71,11 +70,11 @@ class NewsDetail(DetailView):
         context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
         context['category'] = Category.objects.all()
         publication_id = self.kwargs.get('pk')
+        print('publication_id = ', self.kwargs.get('pk'))
         # post_category = PostCategory.objects.get(pk=publication_id)
         # print('post_category', post_category)
-        post = Post.objects.get(pk=publication_id)
-        print('POST', post.objects.all())
-        print('publication_id = ', self.kwargs.get('pk'))
+        # post = Post.objects.get(pk=publication_id)
+        # print('POST', post.objects.all())
         # id = self.kwargs.get('pk')  # получаем ИД поста (выдергиваем из нашего объекта из модели Пост)
         # # формируем запрос, на выходе получим список имен пользователей subscribers__name, которые находятся
         # # в подписчиках данной группы, либо не находятся
