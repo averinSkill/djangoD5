@@ -71,8 +71,10 @@ class NewsDetail(DetailView):
         context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
         context['category'] = Category.objects.all()
         publication_id = self.kwargs.get('pk')
-        post = Post.objects.get(pk=publication_id)
-        print('POST', post.objects.all())
+        post_category = PostCategory.objects.get(pk=publication_id)
+        print('post_category', post_category)
+        # post = Post.objects.get(pk=publication_id)
+        # print('POST', post.objects.all())
         print('publication_id = ', self.kwargs.get('pk'))
         # id = self.kwargs.get('pk')  # получаем ИД поста (выдергиваем из нашего объекта из модели Пост)
         # # формируем запрос, на выходе получим список имен пользователей subscribers__name, которые находятся

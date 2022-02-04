@@ -93,6 +93,6 @@ class Comment(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.content}'
+        return f'{self.text}'
 
 
