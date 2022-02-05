@@ -13,22 +13,26 @@ from .models import Post, Category, User
 @receiver(post_save, sender=Post)
 def notify_managers_appointment(sender, instance, created, **kwargs):
     if created:
-        subject = f'{instance.title} {instance.d_time.strftime("%d %m %Y")}'
+        subject = f'Новая статья{instance.title}'
     else:
-        subject = f'Публикация изменена {instance.title} {instance.d_time.strftime("%d %m %Y")}'
+        subject = f'Изменения в статье  {instance.title} {instance.d_time.strftime("%d %m %Y")}'
+    recipient_list = []
+    # categ = instance.category.all().values()
+    # print('КАТЕГОРИЯ', f'{categ}')
+    for category in instance.category.all():
+        for user in category.subscribers.all():
+            print(user.email)
+            print(user)
+            recipient_list.append(user.email)
 
-    categ = instance.category.all().values()
-    # subscribers =
-    print('TYPE POST', f'{instance.type_post}')
-    print('КАТЕГОРИЯ', f'{categ}')
-    # user = self.request.user
-    # user_id = self.request.user.id
-    # # sub_category - это все категории подписчика!!
-    # sub_category = Category.objects.all().filter(subscribers=self.request.user.id)
+    print(recipient_list)
+    print('instance', instance)
 
-    mail_managers(
-        subject=subject,
-        message=instance.text,
+    send_mail(
+        subject=f'News Portal: новая статья {instance.title} вышла в {instance.d_time.strftime("%d %m %Y")}',
+        message=f'новая статья {instance.text} .',
+        from_email='apractikant@yandex.ru',
+        recipient_list=recipient_list,
     )
     print('Опубликована новая статья: ', f'{instance.title} {instance.d_time.strftime("%d %m %Y")}')
 
