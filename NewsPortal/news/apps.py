@@ -7,3 +7,8 @@ class NewsConfig(AppConfig):
 
     def ready(self):
         import news.signals
+
+        from .tasks import weekly_digest
+        from news.management.commands.runapscheduler import my_job
+
+
